@@ -14,7 +14,7 @@ class UserView(mixins.CreateModelMixin, generics.GenericAPIView):
         returning the user data.
         """
         self.create(request, *args, **kwargs)
-        return Response({"msg": "User registered succesfully!"}, status=status.HTTP_200_OK)
+        return Response({"msg": "User registered succesfully!"}, status=status.HTTP_201_CREATED)
 
 
 class PostListView(generics.ListCreateAPIView):

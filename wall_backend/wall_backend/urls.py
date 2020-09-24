@@ -21,7 +21,7 @@ from wall_api.views import UserView, PostListView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', views.obtain_auth_token),
-    path('users/', UserView.as_view()),
-    path('posts/', PostListView.as_view())
+    path('api-token-auth/', views.obtain_auth_token, name='token'),
+    path('users/', UserView.as_view(), name='users'),
+    path('posts/', PostListView.as_view(), name='posts')
 ]

@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
@@ -11,6 +14,15 @@ class User(AbstractUser):
     pass
 
 
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """
+    Creates a token automaticaly for a recently created user.
+    """
+    if created:
+        Token.objects.create(user=instance)
+
+
 class Post(models.Model):
     """
     The model used to store all posts from the Wall app.
@@ -18,3 +30,6 @@ class Post(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['time']

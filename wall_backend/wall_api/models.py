@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.core.mail import send_mail
 
 
 class User(AbstractUser):
@@ -21,6 +22,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     """
     if created:
         Token.objects.create(user=instance)
+        send_mail('Thank\'s for joining Wall App', 'We are really glad to have you here!',
+                  'staff@wallapp.com', [instance.email], fail_silently=False)
 
 
 class Post(models.Model):

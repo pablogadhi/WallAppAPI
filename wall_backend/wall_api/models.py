@@ -18,12 +18,13 @@ class User(AbstractUser):
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     """
-    Creates a token automaticaly for a recently created user.
+    Creates a token automaticaly for a recently created user
+    and sends and email to his email address.
     """
     if created:
         Token.objects.create(user=instance)
         send_mail('Thank\'s for joining Wall App', 'We are really glad to have you here!',
-                  'staff@wallapp.com', [instance.email], fail_silently=False)
+                  'staff@wallapp.com', [instance.email], fail_silently=True)
 
 
 class Post(models.Model):

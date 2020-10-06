@@ -53,10 +53,16 @@ class PostListView(generics.ListCreateAPIView):
 
 
 def transform_error_detail(detail, key):
+    """
+    Transforms the "missing field" error message to include the field name on it.
+    """
     return ErrorDetail("The {} field may not be blank".format(key)) if str(detail) == "This field may not be blank." else detail
 
 
 def custom_error_handler(exc, context):
+    """
+    Runs transform_error_detail on every error returned by the default exception handler.
+    """
     response = exception_handler(exc, context)
     response.data = {key: [transform_error_detail(detail, key) for detail in detail_list] for key,
                      detail_list in response.data.items()}

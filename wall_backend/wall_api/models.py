@@ -9,10 +9,9 @@ from django.core.mail import send_mail
 class User(AbstractUser):
     """
     A custom User class that inherits Django's default User model
-    to be able to easily extend it's functionality
-    if the need arises in the future.
+    to be able to easily extend it's functionality.
     """
-    pass
+    email = models.EmailField(blank=False)
 
 
 @receiver(post_save, sender=User)

@@ -1,5 +1,7 @@
 from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import exception_handler
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from wall_api.models import User, Post
@@ -48,3 +50,14 @@ class PostListView(generics.ListCreateAPIView):
         the posted_by field.
         """
         serializer.save(posted_by=self.request.user)
+
+
+def transform_error_detail(detail, key):
+    return ErrorDetail("The {} field may not be blank".format(key)) if str(detail) == "This field may not be blank." else detail
+
+
+def custom_error_handler(exc, context):
+    response = exception_handler(exc, context)
+    response.data = {key: [transform_error_detail(detail, key) for detail in detail_list] for key,
+                     detail_list in response.data.items()}
+    return response

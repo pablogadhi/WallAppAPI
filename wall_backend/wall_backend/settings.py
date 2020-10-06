@@ -116,7 +116,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'wall_api.views.custom_error_handler'
 }
 
 
